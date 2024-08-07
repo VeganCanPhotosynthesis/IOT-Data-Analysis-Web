@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: url("https://i.postimg.cc/Yq82D75K/1.png") no-repeat center center;
+            background-size: cover;
+            color: #fff;
+            font-family: 'Merriweather', serif;
+            text-align: center;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        @keyframes gradientBG {
+            0%, 100% { background-position: center center, 0% 50%; }
+            50% { background-position: center center, 100% 50%; }
+        }
+
+        @keyframes shine {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.5); }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            padding-top: 80px;
+            animation: fadeInUp 2s ease-out;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease-in-out;
+            margin: 20px;
+        }
+        .card h3 {
+            color: rgb(0, 0, 0);
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        .card p {
+            color: #555;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .btn {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 25px;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: transform 0.3s ease-in-out;
+        }
+        .btn:hover {
+            transform: scale(1.1);
+        }
+        h1 {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #000000;
+        }
+        p {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #000000;
+        }
+        .logo {
+            position: absolute;
+            top: 60px;
+            right: 810px;
+            width: 400px; /* adjust the size as needed */
+        }
+    </style>
+</head>
+<body>
+    <img src="https://www.mill6chat.org/wp-content/uploads/2022/03/PolyU-Logo.png" alt="PolyU Logo" class="logo">
+    <div class="container">
+        <h1>Welcome to the Smart Campus System</h1>
+        <p>You can choose a section to view the data analysis and sensor metrics.</p>
+        <div class="row justify-content-center">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Data Analysis</h3>
+                        <a href="{% url 'data_analysis' %}" class="btn btn-success">Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Dashboard</h3>
+                        <a href="{% url 'dashboard' %}" class="btn btn-secondary">Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Event Data</h3>
+                        <a href="{% url 'event_data' %}" class="btn btn-info">Go</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h3>Sensor Data</h3>
+                        <a href="{% url 'sensor_data_list' %}" class="btn btn-primary">Go</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Data Dashboard</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        body.light-mode {
+            background: #f8f9fa;
+            color: #343a40;
+        }
+        body.dark-mode {
+            background: #2b2b2b;
+            color: #e0e0e0;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .card {
+            margin-bottom: 15px;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            background: #ffffff;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: scale(1.03);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            padding: 10px 0;
+        }
+        .card-body {
+            padding: 20px;
+        }
+        .table {
+            margin-bottom: 0;
+        }
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+        .table thead th {
+            background-color: #0056b3;
+            color: #fff;
+        }
+        .table tbody tr:hover {
+            background-color: #e0e0e0;
+        }
+        h1 {
+            font-weight: 700;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .toggle-switch {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+        }
+        .toggle-switch input {
+            display: none;
+        }
+        .toggle-switch label {
+            display: inline-block;
+            cursor: pointer;
+            background-color: #007bff;
+            padding: 5px 10px;
+            color: white;
+            border-radius: 15px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .toggle-switch input:checked + label {
+            background-color: #343a40;
+            color: #f8f9fa;
+        }
+        .summary-select {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00);
+            background-size: 400% 400%;
+            animation: gradientAnimation 15s ease infinite;
+            z-index: -1;
+        }
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        .logo {
+            position: absolute;
+            top: 28px;
+            right:825px;
+            width: 48px; /* adjust the size as needed */
+        }
+        .custom-select {
+            background-color: #fff;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+            padding: 5px;
+            color: #007bff;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            width: auto;
+            display: inline-block;
+        }
+        .custom-select:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+        .custom-select:focus {
+            outline: none;
+            border-color: #0056b3;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+        .custom-select option {
+            background-color: #fff;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="background-animation"></div>
+    <div class="toggle-switch">
+        <input type="checkbox" id="darkModeSwitch">
+        <label for="darkModeSwitch">Dark Mode</label>
+    </div>
+    <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Hong_Kong_Polytechnic_University_logo.svg/1024px-Hong_Kong_Polytechnic_University_logo.svg.png" alt="PolyU Logo" class="logo">
+    <div class="container">
+        <h1>Data Dashboard</h1>
+
+        <!-- Navigation Links -->
+        <div class="mb-4 text-center">
+            <a href="{% url 'homepage' %}" class="btn btn-primary mx-2">Homepage</a>
+            <a href="{% url 'sensor_data_list' %}" class="btn btn-secondary mx-2">Sensor Data List</a>
+            <a href="{% url 'event_data' %}" class="btn btn-secondary mx-2">Event Data</a>
+            <a href="{% url 'data_analysis' %}" class="btn btn-secondary mx-2">Data Analysis</a>
+        </div>
+
+        <div class="summary-select text-center">
+            <form method="get">
+                <label for="locationSelect">Select Location for Summary:</label>
+                <select id="locationSelect" name="location" class="custom-select w-25" onchange="this.form.submit()">
+                    {% for location_slug, location_info in location_data.items %}
+                    <option value="{{ location_slug }}" {% if location_slug == selected_location_slug %}selected{% endif %}>{{ location_info.location }}</option>
+                    {% endfor %}
+                </select>
+            </form>
+        </div>
+        <div class="table-centered">
+            <div class="card">
+                <div class="card-header">
+                    Summary for {{ selected_location }}
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Average Temperature</th>
+                                <th>Average Humidity</th>
+                                <th>Average Light Intensity</th>
+                                <th>Average Sound Level</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{ avg_temp|floatformat:2 }}</td>
+                                <td>{{ avg_hum|floatformat:2 }}</td>
+                                <td>{{ avg_light|floatformat:2 }}</td>
+                                <td>{{ avg_snd|floatformat:2 }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="table-centered mt-5">
+            <div class="card">
+                <div class="card-header">
+                    Sensor Data Chart
+                </div>
+                <div class="card-body">
+                    <img src="data:image/png;base64,{{ image_base64 }}" alt="Sensor Data Chart" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="text-center mt-4">
+        &copy; 2024 Group4. All rights reserved.
+    </footer>
+    <script

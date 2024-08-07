@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Analysis</title>
+    <!-- Include Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Merriweather', serif;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: #333; /* Changed text color to dark gray for better contrast */
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .logo {
+            position: absolute;
+            top: 45px;
+            right:800px;
+            width: 48px; /* adjust the size as needed */
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.9); /* Slightly darker background for cards */
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card table {
+            color: #333; /* Ensuring table text is dark gray */
+        }
+        .insights {
+            color: #444; /* Slightly lighter gray for insights */
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/Hong_Kong_Polytechnic_University_logo.svg/1024px-Hong_Kong_Polytechnic_University_logo.svg.png" alt="PolyU Logo" class="logo">
+        <h1 class="text-center mb-4">Data Analysis</h1>
+
+        <!-- Navigation Links -->
+        <div class="mb-4 text-center">
+            <a href="{% url 'homepage' %}" class="btn btn-primary mx-2">Homepage</a>
+            <a href="{% url 'sensor_data_list' %}" class="btn btn-secondary mx-2">Sensor Data List</a>
+            <a href="{% url 'event_data' %}" class="btn btn-secondary mx-2">Event Data</a>
+            <a href="{% url 'dashboard' %}" class="btn btn-secondary mx-2">Dashboard</a>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card p-4 mb-4">
+                    <h2 class="mb-3">Summary Statistics</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th>Temperature</th>
+                                <th>Humidity</th>
+                                <th>Light</th>
+                                <th>Sound</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mean</td>
+                                <td>{{ summary_stats.temp.mean|floatformat:2 }}</td>
+                                <td>{{ summary_stats.hum.mean|floatformat:2 }}</td>
+                                <td>{{ summary_stats.light.mean|floatformat:2 }}</td>
+                                <td>{{ summary_stats.snd.mean|floatformat:2 }}</td>
+                            </tr>
+                            <tr>
+                                <td>Standard Deviation</td>
+                                <td>{{ summary_stats.temp.std|floatformat:2 }}</td>
+                                <td>{{ summary_stats.hum.std|floatformat:2 }}</td>
+                                <td>{{ summary_stats.light.std|floatformat:2 }}</td>
+                                <td>{{ summary_stats.snd.std|floatformat:2 }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="col-lg-6">
+                <div class="card p-4 mb-4">
+                    <h2 class="mb-3">Time Series Plot</h2>
+                    <img src="{{ time_series_plot }}" class="img-fluid" alt="Time Series Plot">
+                    <p class="mt-3 insights">Insights: This plot displays the time series data for various sensor readings over time. Notable patterns and fluctuations can be observed, especially in the snd and light readings.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card p-4 mb-4">
+                    <h2 class="mb-3">Correlation Matrix</h2>
+                    <img src="{{ corr_matrix_plot }}" class="img-fluid" alt="Correlation Matrix">
+                    <p class="mt-3 insights">Insights: The correlation matrix shows the relationships between different sensor readings. High correlation values indicate a strong relationship between the corresponding sensor metrics.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card p-4 mb-4">
+                    <h2 class="mb-3">Location-Based Analysis</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Location</th>
+                                <th>Temperature</th>
+                                <th>Humidity</th>
+                                <th>Light</th>
+                                <th>Sound</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for loc, stats in location_stats.items %}
+                                <tr>
+                                    <td>{{ loc }}</td>
+                                    <td>{{ stats.temp|floatformat:2 }}</td>
+                                    <td>{{ stats.hum|floatformat:2 }}</td>
+                                    <td>{{ stats.light|floatformat:2 }}</td>
+                                    <td>{{ stats.snd|floatformat:2 }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <p class="mt-3 insights">Insights: This table provides the average sensor readings for different locations. It helps in understanding the environmental conditions at various points within the monitored area.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Include Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
