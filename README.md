@@ -35,4 +35,8 @@ This project is designed to provide a web interface for real-time monitoring and
 
 ## Usage
 - Access the web application at `http://localhost:8000`.
-![image](https://github.com/user-attachments/assets/f47def96-ca14-439d-8429-2af4ad38d0d3)
+![image](https://github.com/user-attachments/assets/838c0590-58ec-41e0-be4f-094ebc7915da)
+![image](https://github.com/user-attachments/assets/56eacec0-4805-49d1-a84e-3c3b0d3c399e)
+![image](https://github.com/user-attachments/assets/148b4331-d09d-4bbd-930a-44249c3aa281)
+![image](https://github.com/user-attachments/assets/9abad8b4-0349-4017-addb-c764eb1b8bb4)
+![image](https://github.com/user-attachments/assets/6e324f5a-188b-4756-bded-8bfb95d1b14c)
